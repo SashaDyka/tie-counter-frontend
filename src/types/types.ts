@@ -1,7 +1,7 @@
 export interface Person{
   id: string;
   name: string;
-  tipAmound: number;
+  tipAmount: number;
   tipPercent: number; //new
 }
 
@@ -14,23 +14,13 @@ export interface Bill{
 }
 
 /*
-model Bill {
-  id                    Int         @id @default(autoincrement())
-  totalAmount           Float
-  defaultTipPercentage  Int
-  people                Person[]
-
-  @@map("bills")
-}
-
 model Person {
   id                        Int      @id @default(autoincrement())
   name                      String
   billId                    Int
-  bill                      Bill     @relation(fields: [billId], references: [id])
+  bill                      Bill     @relation
   individualTipPercentage   Int?
   individualAmount          Float?
 
-  @@map("persons")
 }
  */
