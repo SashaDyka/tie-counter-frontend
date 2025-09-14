@@ -1,0 +1,18 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: var(--surface-color);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: var(--secondary-color);
+}

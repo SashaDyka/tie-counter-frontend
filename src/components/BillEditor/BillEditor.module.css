@@ -1,0 +1,109 @@
+.container {
+  background-color: var(--surface-color);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+}
+
+.button {
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: var(--surface-color);
+}
+
+.button.save {
+  background-color: var(--success-color);
+}
+
+.button.reset {
+  background-color: var(--secondary-color);
+}
+
+.button.cancel {
+  background-color: var(--danger-color);
+}
+
+.button:hover {
+  filter: brightness(1.1);
+}
+
+
+.group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 16px;
+}
+
+.tipButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.tipButton {
+  padding: 10px 15px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-color);
+  cursor: pointer;
+}
+
+.tipButton.active {
+  background-color: var(--primary-color);
+  color: var(--surface-color);
+  border-color: var(--primary-color);
+}
+
+.resultsBox {
+  margin-top: 30px;
+  background-color: var(--background-color);
+  padding: 20px;
+  border-radius: var(--border-radius);
+}
+
+.totalTip,
+.perPerson {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.personList {
+  list-style: none;
+  padding: 0;
+}
+
+.personItem {
+  margin-bottom: 5px;
+}
