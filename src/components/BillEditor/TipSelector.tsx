@@ -1,4 +1,6 @@
 import React from 'react';
+import styles from './BillEditor.module.css';
+
 
 interface TipSelectorProps {
     value: number;
@@ -10,8 +12,8 @@ const TipSelector: React.FC<TipSelectorProps> = ({ value, onChange }) => {
 
   return (
      <div>
-        <label>Select the tip percentage: </label>
-        <div> 
+        <label className={styles.label}>Select the tip percentage: </label>
+        <div className={styles.tipButtons}> 
             {options.map((p) => (
                 <button
                     key={p}

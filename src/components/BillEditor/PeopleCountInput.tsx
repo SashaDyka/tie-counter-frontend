@@ -1,4 +1,6 @@
 import React from 'react';
+import styles from './BillEditor.module.css';
+
 
 interface PeopleCountInputProps {
     value: number;
@@ -8,8 +10,9 @@ interface PeopleCountInputProps {
 const PeopleCountInput: React.FC<PeopleCountInputProps> = ({ value, onChange }) => {
   return (
     <div>
-      <label>Amound of people:</label>
+      <label className={styles.label}>Amound of people:</label>
         <input
+        className={styles.input}
             type="number"
             min="1"
             value={value}

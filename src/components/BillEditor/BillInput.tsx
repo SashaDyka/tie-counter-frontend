@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './BillEditor.module.css';
 
 interface BillInputProps {
     value: number;
@@ -9,8 +10,9 @@ const BillInput: React.FC<BillInputProps> = ({ value, onChange }) => {
 
   return (
     <div>
-      <label>Bill summ: </label>
+      <label className={styles.label}>Bill summ: </label>
       <input
+        className={styles.input}
         type="number"
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}

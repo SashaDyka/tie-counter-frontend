@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Person } from '../../types/types'; 
-import PersonItem from './PersonItem';
+import PersonItem from './PersonItem'; 
+import styles from './PeopleList.module.css';
 
 interface PeopleListProps {
     people: Person[]; 
@@ -14,16 +15,18 @@ const PeopleList: React.FC<PeopleListProps> = ({ people, onUpdatePerson }) => {
   };
   
   return (
-    <div>
-      <h3>People:</h3>
-      {people.map((person, i) => (
-        <PersonItem
-          key={person.id} 
-          index={i}
-          person={person}
-          onUpdate={handleUpdate} 
-        />
-      ))}
+    <div className={styles.container}>
+      <h3 className={styles.title}>People:</h3>
+      <div className={styles.list}>
+        {people.map((person, i) => (
+          <PersonItem
+            key={person.id} 
+            index={i}
+            person={person}
+            onUpdate={handleUpdate} 
+          />
+        ))}
+      </div>
     </div>
   );
 };

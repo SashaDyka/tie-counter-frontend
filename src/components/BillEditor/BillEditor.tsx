@@ -5,6 +5,8 @@ import  TipSelector from './TipSelector'
 import  PeopleCountInput from './PeopleCountInput'
 import  PeopleList from './PeopleList'
 import Results from './Results';
+import styles from './BillEditor.module.css';
+
 
 
 interface BillEditorProps {  
@@ -82,8 +84,8 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel }) => {
    
     
   return (
-    <div>
-      <h2>Bill № {bill.id}</h2>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Bill № {bill.id}</h2>
       <BillInput value={billAmount} onChange={setBillAmount} />
       <TipSelector value={tipPercent} onChange={setTipPercent} />
       <PeopleCountInput value={peopleCount} onChange={setPeopleCount} />
@@ -94,10 +96,11 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel }) => {
         people={people}
       />
 
-      <button onClick={handleSave}>Save</button>
-      <button onClick={handleReset}>Reset</button>
-      <button onClick={handleCancel}>Cancel</button>
-      
+      <div className={styles.buttons}>
+        <button className={`${styles.button} ${styles.save}`} onClick={handleSave}>Save</button>
+        <button className={`${styles.button} ${styles.reset }`} onClick={handleReset}>Reset</button>
+        <button className={`${styles.button} ${styles.cancel }`} onClick={handleCancel}>Cancel</button>
+      </div>
     </div>
   );
 };

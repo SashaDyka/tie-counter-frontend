@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Person } from '../../types/types'; 
+import styles from './PersonItem.module.css';
 
 interface PersonItemProps {
   person: Person;
@@ -50,25 +51,31 @@ const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
 
 
   return (
-    <div>
-      <label>
-        Person name {index + 1}:
+   <div className={styles.container}>
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>
+          Person name {index + 1}:
+        </label>
         <input
+          className={styles.input}
           type="text"
           value={name}
           onChange={handleNameChange}
         />
-      </label>
+      </div>
       
-      <label>
-        {customAmount ? 'Your amount' : 'Tip percentage'}:
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>
+          {customAmount ? 'Your amount:' : 'Tip percentage'}:
+        </label>
         <input
+          className={styles.input}
           type="number"
           value={customAmount ? tipAmount : tipPercent}
           onChange={handleTipChange}
         />
-      </label>
-      <button onClick={handleToggleTipType}>
+      </div>
+      <button className={styles.button} onClick={handleToggleTipType}>
         {customAmount ? 'Use %' : 'Use amount'}
       </button>
     </div>
