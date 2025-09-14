@@ -1,16 +1,35 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { fetchAllBills, saveBill } from './api/bills.service.ts';
 import type { Bill } from './types/types'
-import BillList from './components/BillList';
+import BillList from './components/BillList/BillList';
 import BillEditor from './components/BillEditor/BillEditor';
-import './style.css'
+import './styles.css';
+
 
 function App() {
   const [bills, setBills] = useState<Bill[]>([]);
   const [selectBill, setSelectBill] = useState<Bill | null>(null);
 
+
+  useEffect(() => {
+    const loadBills = async () => {
+      const fetchedBills = await fetchAllBills();
+      setBills(fetchedBills);
+    };
+    loadBills();
+  }, []);
+
+
+
+  const handleSaveBill = async (updatedBill: any) => {
+    const savedBill = await saveBill(updatedBill);
+    setBills(bills.map(b => (b.id === savedBill.id ? savedBill : b)));
+    setSelectBill(null);
+  };
+
   const createBill = () => {
     const tempBill: Bill = {
-      id: '1',
+      id: '',
       totalAmount: 8000,
       tipPercent: 10,
       peopleCount: 1,
@@ -27,17 +46,15 @@ function App() {
   
 
   return (
-    <div>
-      <h1>Tie counter</h1>
-      <button onClick={createBill}>Create Bill</button>
+    <div >
       {selectBill? (
         <BillEditor bill={selectBill}
-        onSave={closeBill}
+        onSave={handleSaveBill}
         onCancel={closeBill} />
       ) : (
         <BillList bills ={bills} onSelectBill = {setSelectBill} />
       )}
-      
+      <button onClick={createBill}>Create Bill</button>
     </div>
       
   )
