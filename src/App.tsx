@@ -29,7 +29,7 @@ function App() {
   return (
     <div>
       <h1>Tie counter</h1>
-      
+      <button onClick={createBill}>Create Bill</button>
       {selectBill? (
         <BillEditor bill={selectBill}
         onSave={closeBill}
@@ -38,9 +38,6 @@ function App() {
         <BillList bills ={bills} onSelectBill = {setSelectBill} />
       )}
       
-      <button onClick={createBill}>Create Bill</button>
-      <button onClick={closeBill}>Close</button>
-
     </div>
       
   )
