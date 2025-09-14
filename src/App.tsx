@@ -10,9 +10,9 @@ function App() {
 
   const createBill = () => {
     const tempBill: Bill = {
-      id: 'temp-1',
-      totalAmount: 8,
-      tipPercent: 5,
+      id: '1',
+      totalAmount: 8000,
+      tipPercent: 10,
       peopleCount: 1,
       people: [],
     };

@@ -2,7 +2,7 @@ export interface Person{
   id: string;
   name: string;
   tipAmount: number;
-  tipPercent: number; //new
+  tipPercent: number; 
 }
 
 export interface Bill{

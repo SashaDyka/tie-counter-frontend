@@ -52,7 +52,7 @@ const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
   return (
     <div>
       <label>
-        Имя человека {index + 1}:
+        Person name {index + 1}:
         <input
           type="text"
           value={name}
@@ -61,7 +61,7 @@ const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
       </label>
       
       <label>
-        {customAmount ? 'Своя сумма' : 'Процент чаевых'}:
+        {customAmount ? 'Your amount' : 'Tip percentage'}:
         <input
           type="number"
           value={customAmount ? tipAmount : tipPercent}
@@ -69,7 +69,7 @@ const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
         />
       </label>
       <button onClick={handleToggleTipType}>
-        {customAmount ? 'Использовать %' : 'Использовать сумму'}
+        {customAmount ? 'Use %' : 'Use amount'}
       </button>
     </div>
   );
