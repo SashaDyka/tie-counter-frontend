@@ -12,15 +12,3 @@ export interface Bill{
   peopleCount: number;
   people: Person []; 
 }
-
-/*
-model Person {
-  id                        Int      @id @default(autoincrement())
-  name                      String
-  billId                    Int
-  bill                      Bill     @relation
-  individualTipPercentage   Int?
-  individualAmount          Float?
-
-}
- */
