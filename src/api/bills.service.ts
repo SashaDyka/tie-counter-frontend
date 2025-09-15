@@ -32,4 +32,12 @@ export const saveBill = async (billData: any) => {
   return response.data;
 };
 
-//TODO: write the rest reqvests
+export const deleteBill = async (id: number) => {
+  try {
+    const response = await axios.delete(`${API_URL}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting bill with ID ${id}:`, error);
+    throw error;
+  }
+};
