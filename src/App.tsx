@@ -54,7 +54,7 @@ function App() {
       ) : (
         <BillList bills ={bills} onSelectBill = {setSelectBill} />
       )}
-      <button onClick={createBill}>Create Bill</button>
+      <button className="button-create" onClick={createBill}>Create Bill</button>
     </div>
       
   )
