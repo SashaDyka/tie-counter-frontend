@@ -13,6 +13,7 @@ interface BillEditorProps {
   bill: Bill; 
   onSave: (updatedBill: Bill) => void; 
   onCancel: () => void;
+  onDelete: (id: string) => void;
 } 
 
 
@@ -21,7 +22,6 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel }) => {
     const [tipPercent, setTipPercent] = useState(bill.tipPercent);
     const [peopleCount, setPeopleCount] = useState(bill.peopleCount);
     const [people, setPeople] = useState<Person[]>(bill.people || []);
-
     const [totalTip, setTotalTip] = useState<number>(0);
     const [totalAmountPerPerson, setTotalAmountPerPerson] = useState<number>(0);
 
@@ -37,7 +37,6 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel }) => {
     useEffect(() => {
       const calculatedTip = billAmount * (tipPercent / 100);
       setTotalTip(calculatedTip);
-        
       const totalAmountWithTip = billAmount + calculatedTip;
       const calculatedAmountPerPerson = peopleCount > 0 ? totalAmountWithTip / peopleCount : 0;
       setTotalAmountPerPerson(calculatedAmountPerPerson);
@@ -111,8 +110,10 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel }) => {
       <div className={styles.buttons}>
         <button className={`${styles.button} ${styles.save}`} onClick={handleSave}>Save</button>
         <button className={`${styles.button} ${styles.reset }`} onClick={handleReset}>Reset</button>
+        <button onClick={() => onDelete(bill.id)}>Delete</button>
         <button className={`${styles.button} ${styles.cancel }`} onClick={handleCancel}>Cancel</button>
       </div>
+      
     </div>
   );
 };
