@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { fetchAllBills, saveBill } from './api/bills.service.ts';
+import { fetchAllBills, saveBill, createBill } from './api/bills.service.ts';
 import type { Bill } from './types/types'
 import BillList from './components/BillList/BillList';
 import BillEditor from './components/BillEditor/BillEditor';
@@ -43,6 +43,19 @@ function App() {
     setSelectBill(tempBill);
   };
   
+
+ /* const createBill = async (newBillData: Bill) => {
+    try {
+      const createdBill = await createBill(newBillData);
+      setBills(prevBills => [...prevBills, createdBill]);
+      setSelectBill(createdBill);
+
+    } catch (error) {
+      console.error("Failed to create bill:", error);
+    }
+  };
+  */
+
   const closeBill = () => {
     setSelectBill(null);
   }
