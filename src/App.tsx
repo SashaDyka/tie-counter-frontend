@@ -10,14 +10,18 @@ function App() {
   const [bills, setBills] = useState<Bill[]>([]);
   const [selectBill, setSelectBill] = useState<Bill | null>(null);
 
-
   useEffect(() => {
     const loadBills = async () => {
-      const fetchedBills = await fetchAllBills();
+      try{
+        const fetchedBills = await fetchAllBills();
       setBills(fetchedBills);
-    };
+      }catch(error) {
+      console.error('Failed to fetch bills:', error);
+    }
+  };
     loadBills();
   }, []);
+  
 
 
 
