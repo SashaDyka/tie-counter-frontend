@@ -93,6 +93,7 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel }) => {
       onCancel();
     }
 
+    console.log('BillEditor passes to PeopleList:', people); //test people 
    
   return (
     <div className={styles.container}>

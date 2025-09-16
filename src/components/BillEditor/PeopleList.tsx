@@ -10,6 +10,8 @@ interface PeopleListProps {
 
 const PeopleList: React.FC<PeopleListProps> = ({ people, onUpdatePerson }) => {
 
+    console.log('PeopleList receives people:', people);
+
   const handleUpdate = (index: number, updatedPerson: Person) => {
     onUpdatePerson(index, updatedPerson);
   };
