@@ -30,7 +30,7 @@ function App() {
   const createBill = () => {
     const tempBill: Bill = {
       id: '',
-      totalAmount: 8000,
+      totalAmount: 0,
       tipPercent: 10,
       peopleCount: 1,
       people: [],
@@ -46,7 +46,7 @@ function App() {
   
 
   return (
-    <div >
+    <div>
       {selectBill? (
         <BillEditor bill={selectBill}
         onSave={handleSaveBill}
