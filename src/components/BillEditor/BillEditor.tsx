@@ -20,7 +20,7 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel }) => {
     const [billAmount, setBillAmount] = useState(bill.totalAmount);
     const [tipPercent, setTipPercent] = useState(bill.tipPercent);
     const [peopleCount, setPeopleCount] = useState(bill.peopleCount);
-    const [people, setPeople] = useState<Person[]>(bill.people);
+    const [people, setPeople] = useState<Person[]>(bill.people || []);
 
     const [totalTip, setTotalTip] = useState<number>(0);
     const [totalAmountPerPerson, setTotalAmountPerPerson] = useState<number>(0);
@@ -30,7 +30,7 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel }) => {
       setBillAmount(bill.totalAmount);
       setTipPercent(bill.tipPercent);
       setPeopleCount(bill.peopleCount);
-      setPeople(bill.people);
+      setPeople(bill.people || []);
     }, [bill]);
 
     
@@ -45,12 +45,24 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel }) => {
 
 
     useEffect(() => {
-      const newPeople: Person[] = Array.from({ length: peopleCount }, (_, i) => {
-        return people[i] || { id: `person-${i}`, name: `Person ${i + 1}`, tipPercent: tipPercent, tipAmount: 0 };
+      const newPeople = Array.from({ length: peopleCount }, (_, i) => {
+        const existingPerson = people[i];
+      if (existingPerson) {
+        return {
+          ...existingPerson,
+          individualTipPercentage: tipPercent,
+      };
+        } else {
+          return {
+            id: `person-${i}`,
+            name: `Person ${i + 1}`,
+            tipPercent: tipPercent, 
+            tipAmount: null,
+          };
+        }
       });
       setPeople(newPeople);
-    }, [peopleCount, tipPercent]);
-
+    }, [peopleCount, tipPercent, people]);
 
     const handleUpdatePerson = (index: number, updatedPerson: Person) => {
       const newPeople = [...people];
@@ -82,7 +94,6 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel }) => {
     }
 
    
-    
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Bill № {bill.id}</h2>
