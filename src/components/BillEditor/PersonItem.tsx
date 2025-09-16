@@ -9,14 +9,14 @@ interface PersonItemProps {
 }
 
 const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
-  const [name, setName] = useState(person.name);
-  const [tipPercent, setTipPercent] = useState(person.tipPercent);
+  const [name, setName] = useState(person.name || '');
+  const [tipPercent, setTipPercent] = useState(person.tipPercent || 0);
   const [tipAmount, setTipAmount] = useState(person.tipAmount || 0);
   const [customAmount, setCustomAmount] = useState(false);
 
   useEffect(() => {
-    setName(person.name);
-    setTipPercent(person.tipPercent);
+    setName(person.name || '');
+    setTipPercent(person.tipPercent || 0);
   }, [person]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
