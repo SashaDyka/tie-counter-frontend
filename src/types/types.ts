@@ -1,8 +1,8 @@
 export interface Person{
   id: string;
   name: string;
-  tipAmount: number;
-  tipPercent: number; 
+  tipAmount: number | null;
+  tipPercent: number | null; 
 }
 
 export interface Bill{
