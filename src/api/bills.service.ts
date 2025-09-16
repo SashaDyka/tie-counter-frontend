@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { Bill } from '../types/types';
 
 const API_URL = 'http://localhost:3000/bills'; 
 
@@ -7,7 +8,7 @@ export const fetchAllBills = async () => {
   return response.data;
 };
 
-export const createBill = async (billData: any) => {
+export const createBill = async (billData: Bill) => {
   try {
     const response = await axios.post(API_URL, billData);
     return response.data;
