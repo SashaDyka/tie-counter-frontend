@@ -8,7 +8,7 @@ export const fetchAllBills = async () => {
   return response.data;
 };
 
-export const createBill = async (billData: Bill) => {
+export const createBill = async (billData: any): Promise<Bill> => {
   try {
     const response = await axios.post(API_URL, billData);
     return response.data;
@@ -33,7 +33,7 @@ export const saveBill = async (billData: any) => {
   return response.data;
 };
 
-export const deleteBill = async (id: number) => {
+export const deleteBill = async (id: string) => {
   try {
     const response = await axios.delete(`${API_URL}/${id}`);
     return response.data;
