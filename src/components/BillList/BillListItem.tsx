@@ -19,9 +19,21 @@ const BillListItem: React.FC<BillListItemProps> = ({ bill, onSelectBill }) => {
         <span>Bill #{bill.id}</span>
         <span>Total: ${bill.totalAmount.toFixed(2)}</span>
       </div>
+
       <div className={styles.details}>
-        <span>Tip: {bill.tipPercent}%</span>
-        <span>People: {bill.peopleCount}</span>
+        <span>Tip: {bill.tipPercent || 0}%</span>
+        {bill.people && bill.people.length > 0 ? (
+          <div>
+            <span>People:</span>
+            <ul className={styles.peopleList}>
+              {bill.people.map(person => (
+                <li key={person.id}>{person.name}</li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <span>People: None</span>
+        )}
       </div>
     </li>
   );
