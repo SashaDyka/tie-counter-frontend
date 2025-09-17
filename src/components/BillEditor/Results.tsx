@@ -5,10 +5,11 @@ import styles from './BillEditor.module.css';
 interface ResultsProps {
     tipAmount: number; 
     amountPerPerson: number;
+    totalAmound: number;
     people: Person[];
 }
 
-const Results: React.FC<ResultsProps> = ({ tipAmount, amountPerPerson, people }) => {
+const Results: React.FC<ResultsProps> = ({ tipAmount, amountPerPerson, totalAmound, people }) => {
 
   return (
     <div className={styles.resultsBox}>

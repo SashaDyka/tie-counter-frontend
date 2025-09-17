@@ -23,6 +23,7 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelet
   const [peopleCount, setPeopleCount] = useState(bill.peopleCount);
   const [people, setPeople] = useState<Person[]>(bill.people || []);
   const [totalTip, setTotalTip] = useState<number>(0);
+  const [totalAmound, setTotalAmound] = useState(bill.totalAmount || 0);
   const [totalAmountPerPerson, setTotalAmountPerPerson] = useState<number>(0);
 
   useEffect(() => {
@@ -154,6 +155,7 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelet
       <Results
         tipAmount={totalTip}
         amountPerPerson={totalAmountPerPerson}
+        totalAmound={totalAmound}
         people={people}
       />
 
