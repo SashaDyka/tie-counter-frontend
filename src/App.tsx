@@ -18,26 +18,34 @@ function App() {
 
   useEffect(() => {
     const loadBills = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const fetchedBills = await fetchAllBills();
-        const billsWithPeopleCount = fetchedBills.map((bill: BackendBill) => ({
-          ...bill,
-          BackendBill: bill.defaultTipPercentage ?? 0,
-          peopleCount: bill.people?.length ?? 0,
-        }));
-      dispatch(setBills(billsWithPeopleCount));
-      } catch (error) {
-        console.error('Failed to fetch bills:', error);
-        setError('Can not fetch bills');
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    loadBills();
-  }, [dispatch]);
+    setLoading(true);
+    setError(null);
+    try {
+      const fetchedBills = await fetchAllBills();
+
+      const normalizedBills: Bill[] = fetchedBills.map((bill: any) => ({
+        ...bill,
+        tipPercent: bill.defaultTipPercentage ?? 0,
+        peopleCount: bill.people?.length ?? 0,
+        people: (bill.people || []).map((person: any) => ({
+          ...person,
+          tipPercent: person.individualTipPercentage ?? bill.defaultTipPercentage ?? 0,
+          tipAmount: person.individualAmount ?? 0,
+        })),
+      }));
+
+      dispatch(setBills(normalizedBills));
+    } catch (error) {
+      console.error('Failed to fetch bills:', error);
+      setError('Can not fetch bills');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadBills();
+}, [dispatch]);
+
 
   const handleCreateBill = () => {
     const tempBill: Bill = {
@@ -136,7 +144,7 @@ function App() {
     dispatch(selectBill(updatedBill));
   };
 
-  console.log("Tip %:", bills);
+  //console.log("Tip %:", bills);
 
   return (
     <div>
