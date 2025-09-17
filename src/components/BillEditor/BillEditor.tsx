@@ -11,7 +11,9 @@ interface BillEditorProps {
   bill: Bill; 
   onSave: (updatedBill: Bill) => void; 
   onCancel: () => void;
+  onUpdate?: (updatedBill: Bill) => void;
   onDelete: (id: number) => void;
+  loading?: boolean;
 }
 
 const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelete }) => {
@@ -37,25 +39,25 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelet
     setTotalAmountPerPerson(calculatedAmountPerPerson);
   }, [billAmount, tipPercent, peopleCount]);
 
-  useEffect(() => {
-    const newPeople = Array.from({ length: peopleCount }, (_, i) => {
-      const existingPerson = people[i];
-      if (existingPerson) {
-        return {
-          ...existingPerson,
-          tipPercent: tipPercent,
-        };
-      } else {
-        return {
-          id: i,
-          name: `Person ${i + 1}`,
-          tipPercent: tipPercent,
-          tipAmount: 0,
-        };
-      }
-    });
-    setPeople(newPeople);
-  }, [peopleCount, tipPercent]);
+  // useEffect(() => { //onChange!!!!!
+  //   const newPeople = Array.from({ length: peopleCount }, (_, i) => {
+  //     const existingPerson = people[i];
+  //     if (existingPerson) {
+  //       return {
+  //         ...existingPerson,
+  //         tipPercent: tipPercent,
+  //       };
+  //     } else {
+  //       return {
+  //         id: i,
+  //         name: `Person ${i + 1}`,
+  //         tipPercent: tipPercent,
+  //         tipAmount: 0,
+  //       };
+  //     }
+  //   });
+  //   setPeople(newPeople);
+  // }, [peopleCount, tipPercent]);
 
   const handleUpdatePerson = (index: number, updatedPerson: Person) => {
     const newPeople = [...people];
@@ -90,6 +92,9 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelet
       onDelete(bill.id);
     }
   };
+
+      console.log('BillEditor send arr[] people:', people);
+
 
   return (
     <div className={styles.container}>
