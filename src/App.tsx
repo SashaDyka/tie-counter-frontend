@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { fetchAllBills, createBill, updateBill, deleteBill } from './api/bills.service.ts';
 import type { Bill } from './types/types'
-import type { BackendBill } from './types/BackendBill.ts'
 import BillList from './components/BillList/BillList';
 import BillEditor from './components/BillEditor/BillEditor';
 import { useDispatch, useSelector } from 'react-redux';
@@ -89,30 +88,41 @@ function App() {
 
 
   const handleSaveBill = async (billToSave: Bill) => {
-    console.log("✔️ Bill успешно создан:");
-    setLoading(true);
-    setError(null);
-    try {
-      const backendData = transformToBackendFormat(billToSave);
-      if (billToSave.id === 0) {
-        const createdBillFromApi = await createBill(backendData);
-        const createdBill = transformToFrontendFormat(createdBillFromApi);
-        dispatch(addBill(createdBill));
-      } else {
-        const updatedBillFromApi = await updateBill(billToSave.id, backendData);
-        const updatedBill = transformToFrontendFormat(updatedBillFromApi);
-        dispatch(updateBillInStore(updatedBill));
-      }
-      dispatch(selectBill(null));
-        
-        console.log("📦 Backend ответ:", JSON.stringify(selectBill, null, 2));
-    } catch (error: any) {
-      const msg = error.response?.data?.message || error.message || 'Error saving bill';
-      setError(msg);
-    } finally {
-      setLoading(false);
+  console.log("✔️ Bill to save:", billToSave);
+  setLoading(true);
+  setError(null);
+  try {
+    const backendData = transformToBackendFormat(billToSave);
+    console.log("Transformed to backend format:", backendData);
+
+    if (billToSave.id === 0) {
+      const createdBillFromApi = await createBill(backendData);
+      console.log("Created bill from API:", createdBillFromApi);
+
+      const createdBill = transformToFrontendFormat(createdBillFromApi);
+      console.log("Created bill transformed to frontend:", createdBill);
+
+      dispatch(addBill(createdBill));
+    } else {
+      const updatedBillFromApi = await updateBill(billToSave.id, backendData);
+      console.log("Updated bill from API:", updatedBillFromApi);
+
+      const updatedBill = transformToFrontendFormat(updatedBillFromApi);
+      console.log("Updated bill transformed to frontend:", updatedBill);
+
+      dispatch(updateBillInStore(updatedBill));
     }
-  };
+
+    dispatch(selectBill(null));
+  } catch (error: any) {
+    const msg = error.response?.data?.message || error.message || 'Error saving bill';
+    console.error(msg);
+    setError(msg);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
 
   const handleDeleteBill = async (id: number) => {
