@@ -28,36 +28,37 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelet
     setBillAmount(bill.totalAmount);
     setTipPercent(bill.tipPercent);
     setPeopleCount(bill.peopleCount);
-    setPeople(bill.people || []);
+    setPeople(bill.people || []);    
+    console.log('People count:', peopleCount);
   }, [bill]);
 
-  useEffect(() => {
+  const handleRecalculate = () => {
     const calculatedTip = billAmount * (tipPercent / 100);
     setTotalTip(calculatedTip);
-    const totalAmountWithTip = billAmount + calculatedTip;
-    const calculatedAmountPerPerson = peopleCount > 0 ? totalAmountWithTip / peopleCount : 0;
-    setTotalAmountPerPerson(calculatedAmountPerPerson);
-  }, [billAmount, tipPercent, peopleCount]);
 
-  // useEffect(() => { //onChange!!!!!
-  //   const newPeople = Array.from({ length: peopleCount }, (_, i) => {
-  //     const existingPerson = people[i];
-  //     if (existingPerson) {
-  //       return {
-  //         ...existingPerson,
-  //         tipPercent: tipPercent,
-  //       };
-  //     } else {
-  //       return {
-  //         id: i,
-  //         name: `Person ${i + 1}`,
-  //         tipPercent: tipPercent,
-  //         tipAmount: 0,
-  //       };
-  //     }
-  //   });
-  //   setPeople(newPeople);
-  // }, [peopleCount, tipPercent]);
+    const totalAmountWithTip = billAmount + calculatedTip;
+    const calculatedAmountPerPerson =
+      peopleCount > 0 ? totalAmountWithTip / peopleCount : 0;
+    setTotalAmountPerPerson(calculatedAmountPerPerson);
+  };
+
+  const newPeople = Array.from({ length: peopleCount }, (_, i) => {
+    const existingPerson = people[i];
+    if (existingPerson) {
+      return {
+        ...existingPerson,
+        tipPercent: tipPercent,
+      };
+    } else {
+      return {
+        id: i,
+        name: `Person ${i + 1}`,
+        tipPercent: tipPercent,
+        tipAmount: 0,
+      };
+    }
+  });
+
 
   const handleUpdatePerson = (index: number, updatedPerson: Person) => {
     const newPeople = [...people];
@@ -99,13 +100,15 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelet
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Bill № {bill.id === 0 ? 'New' : bill.id}</h2>
-      <BillInput value={billAmount} onChange={setBillAmount} />
-      <TipSelector value={tipPercent} onChange={setTipPercent} />
+      <BillInput value={billAmount} onChange={setBillAmount} onBlur={handleRecalculate}
+        onKeyDown={(e) => e.key === 'Enter' && handleRecalculate()} />
+      <TipSelector value={tipPercent} onChange={setTipPercent} onBlur={handleRecalculate}
+        onKeyDown={(e) => e.key === 'Enter' && handleRecalculate()} />
       <PeopleCountInput value={peopleCount} onChange={setPeopleCount} />
       <PeopleList people={people} onUpdatePerson={handleUpdatePerson} />
       <Results
         tipAmount={totalTip}
-        tipPercent={totalAmountPerPerson}
+        amountPerPerson={totalAmountPerPerson}
         people={people}
       />
 
