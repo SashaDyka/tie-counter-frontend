@@ -21,7 +21,11 @@ function App() {
       setError(null);
       try {
         const fetchedBills = await fetchAllBills();
-        dispatch(setBills(fetchedBills));
+        const billsWithPeopleCount = fetchedBills.map((bill: Bill) => ({
+          ...bill,
+          peopleCount: bill.people?.length ?? 0,
+        }));
+      dispatch(setBills(billsWithPeopleCount));
       } catch (error) {
         console.error('Failed to fetch bills:', error);
         setError('Can not fetch bills');
@@ -45,33 +49,53 @@ function App() {
     dispatch(selectBill(tempBill));
   };
 
-  // Преобразование данных для API (frontend -> backend) !приевсти исла к типу (пустые знаения)
+  
   const transformToBackendFormat = (bill: Bill) => {
     return {
       totalAmount: bill.totalAmount,
       defaultTipPercentage: bill.tipPercent,
       people: bill.people.map(person => ({
         name: person.name,
-        individualAmount: person.tipAmount,
-        individualTipPercentage: person.tipPercent,
+        individualAmount: person.tipAmount ?? undefined,
+        individualTipPercentage: person.tipPercent ?? undefined,
       })),
     };
   };
 
+  const transformToFrontendFormat = (apiBill: any): Bill => {
+    return {
+      id: apiBill.id,
+      totalAmount: apiBill.totalAmount,
+      tipPercent: apiBill.defaultTipPercentage,
+      peopleCount: apiBill.people.length,
+      people: apiBill.people.map((person: any) => ({
+        id: person.id,
+        name: person.name,
+        tipAmount: person.individualAmount ?? null,
+        tipPercent: person.individualTipPercentage ?? null,
+      }))
+    };
+  };
+
+
   const handleSaveBill = async (billToSave: Bill) => {
+    console.log("✔️ Bill успешно создан:");
     setLoading(true);
     setError(null);
-
     try {
       const backendData = transformToBackendFormat(billToSave);
       if (billToSave.id === 0) {
-        const createdBill = await createBill(backendData);
+        const createdBillFromApi = await createBill(backendData);
+        const createdBill = transformToFrontendFormat(createdBillFromApi);
         dispatch(addBill(createdBill));
       } else {
-        const updatedBill = await updateBill(billToSave.id, backendData);
+        const updatedBillFromApi = await updateBill(billToSave.id, backendData);
+        const updatedBill = transformToFrontendFormat(updatedBillFromApi);
         dispatch(updateBillInStore(updatedBill));
       }
       dispatch(selectBill(null));
+        
+        console.log("📦 Backend ответ:", JSON.stringify(selectBill, null, 2));
     } catch (error: any) {
       const msg = error.response?.data?.message || error.message || 'Error saving bill';
       setError(msg);
@@ -79,6 +103,7 @@ function App() {
       setLoading(false);
     }
   };
+
 
   const handleDeleteBill = async (id: number) => {
     if (!window.confirm('Are you sure you want to delete this bill?')) {
