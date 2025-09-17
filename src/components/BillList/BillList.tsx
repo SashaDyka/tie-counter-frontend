@@ -7,6 +7,7 @@ import styles from './BillList.module.css';
 interface BillListProps{
     bills: Bill[];
   onSelectBill: (bill: Bill) => void;
+  loading?: boolean;
 }
 
 const BillList: React.FC<BillListProps> = ({ bills, onSelectBill }) => {
