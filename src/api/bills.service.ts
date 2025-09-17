@@ -1,19 +1,33 @@
 import axios from 'axios';
-import type { Bill } from '../types/types';
 
 const API_URL = 'http://localhost:3000/bills'; 
 
 export const fetchAllBills = async () => {
-  const response = await axios.get<any[]>(API_URL);
-  return response.data;
+  try {
+    const response = await axios.get(API_URL);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching bills:', error);
+    throw error;
+  }
 };
 
-export const createBill = async (billData: any): Promise<Bill> => {
+export const fetchBillById = async (id: number) => {
+  try {
+    const response = await axios.get(`${API_URL}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching bill with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const createBill = async (billData: any) => {
   try {
     const response = await axios.post(API_URL, billData);
     return response.data;
   } catch (error) {
-    console.error("Error creating bill:", error);
+    console.error('Error creating bill:', error);
     throw error;
   }
 };
@@ -28,12 +42,7 @@ export const updateBill = async (id: number, billData: any) => {
   }
 };
 
-export const saveBill = async (billData: any) => {
-  const response = await axios.post<any>(API_URL, billData);
-  return response.data;
-};
-
-export const deleteBill = async (id: string) => {
+export const deleteBill = async (id: number) => {
   try {
     const response = await axios.delete(`${API_URL}/${id}`);
     return response.data;
@@ -42,3 +51,4 @@ export const deleteBill = async (id: string) => {
     throw error;
   }
 };
+
