@@ -1,6 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { Bill } from '../../types/types';
 
-const initialState = {
+interface BillsState {
+  bills: Bill[];
+  selectedBill: Bill | null;
+}
+
+const initialState: BillsState = {
   bills: [],
   selectedBill: null,
 };
@@ -9,26 +16,29 @@ const billsSlice = createSlice({
   name: 'bills',
   initialState,
   reducers: {
-    setBills: (state, action) => {
+    setBills: (state, action: PayloadAction<Bill[]>) => {
       state.bills = action.payload;
     },
-    selectBill: (state, action) => {
+    selectBill: (state, action: PayloadAction<Bill | null>) => {
       state.selectedBill = action.payload;
     },
-    addBill: (state, action) => {
+    addBill: (state, action: PayloadAction<Bill>) => {
       state.bills.push(action.payload);
     },
-    updateBill: (state, action) => {
+    updateBillInStore: (state, action: PayloadAction<Bill>) => {
       const index = state.bills.findIndex(bill => bill.id === action.payload.id);
       if (index !== -1) {
         state.bills[index] = action.payload;
       }
     },
-    deletedBill: (state, action) => {
+    deletedBill: (state, action: PayloadAction<number>) => {
       state.bills = state.bills.filter(bill => bill.id !== action.payload);
     },
   },
 });
 
-export const { setBills, selectBill, addBill, updateBill, deletedBill } = billsSlice.actions;
+// Экспорт экшенов
+export const { setBills, selectBill, addBill, updateBillInStore, deletedBill } = billsSlice.actions;
+
+// Экспорт редьюсера
 export default billsSlice.reducer;
