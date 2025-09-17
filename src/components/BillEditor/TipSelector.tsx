@@ -5,12 +5,12 @@ import styles from './BillEditor.module.css';
 interface TipSelectorProps {
     value: number;
     onChange: (value: number) => void;
-    onBlur?: () => void;              
-    onKeyDown?: (e: React.KeyboardEvent) => void;
 }
 
-const TipSelector: React.FC<TipSelectorProps> = ({ value, onChange, onBlur, onKeyDown }) => {
+const TipSelector: React.FC<TipSelectorProps> = ({ value, onChange }) => {
+    console.log('Tio %:', value);
     const options = [5, 10, 15];
+
 
   return (
      <div>
@@ -19,9 +19,8 @@ const TipSelector: React.FC<TipSelectorProps> = ({ value, onChange, onBlur, onKe
             {options.map((p) => (
                 <button
                     key={p}
-                    onClick={() => onChange(p)}
-                    onBlur={onBlur} 
-                    onKeyDown={onKeyDown}
+                    type='button'
+                    onClick={() => onChange(p)}                
                     className={p === value ? 'selected' : ''} >
                     {p}%
                 </button>
