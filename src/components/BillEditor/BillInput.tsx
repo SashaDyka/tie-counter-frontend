@@ -2,11 +2,13 @@ import React from 'react';
 import styles from './BillEditor.module.css';
 
 interface BillInputProps {
-    value: number;
-    onChange: (value: number) => void;
+  value: number;
+  onChange: (value: number) => void;
+  onBlur?: () => void;              
+  onKeyDown?: (e: React.KeyboardEvent) => void;
 }
 
-const BillInput: React.FC<BillInputProps> = ({ value, onChange }) => {
+const BillInput: React.FC<BillInputProps> = ({ value, onChange, onBlur, onKeyDown }) => {
 
   return (
     <div>
@@ -16,6 +18,8 @@ const BillInput: React.FC<BillInputProps> = ({ value, onChange }) => {
         type="number"
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
+        onBlur={onBlur} 
+        onKeyDown={onKeyDown} 
       />
     </div>
   );

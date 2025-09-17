@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { Person } from '../../types/types'; 
 import styles from './PersonItem.module.css';
 
@@ -18,7 +18,8 @@ const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
     onUpdate(index, {
       ...person,
       name,
-      tipPercent,
+      tipPercent: customAmount ? null : tipPercent,
+      tipAmount: customAmount ? tipAmount : null,
     });
   };
 
@@ -44,6 +45,7 @@ const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           onBlur={handleUpdate}
+          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
         />
       </div>
       
@@ -57,6 +59,7 @@ const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
           value={customAmount ? tipAmount : tipPercent}
           onChange={(e) => setTipPercent(Number(e.target.value))}
           onBlur={handleUpdate}
+          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
         />
       </div>
       <button className={styles.button} onClick={handleToggleTipType}>
