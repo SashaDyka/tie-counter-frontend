@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { fetchAllBills, createBill, updateBill, deleteBill } from './api/bills.service.ts';
 import type { Bill } from './types/types'
+import type { BackendBill } from './types/BackendBill.ts'
 import BillList from './components/BillList/BillList';
 import BillEditor from './components/BillEditor/BillEditor';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,8 +22,9 @@ function App() {
       setError(null);
       try {
         const fetchedBills = await fetchAllBills();
-        const billsWithPeopleCount = fetchedBills.map((bill: Bill) => ({
+        const billsWithPeopleCount = fetchedBills.map((bill: BackendBill) => ({
           ...bill,
+          BackendBill: bill.defaultTipPercentage ?? 0,
           peopleCount: bill.people?.length ?? 0,
         }));
       dispatch(setBills(billsWithPeopleCount));
@@ -134,7 +136,7 @@ function App() {
     dispatch(selectBill(updatedBill));
   };
 
-  console.log("Selected:", selectedBill);
+  console.log("Tip %:", bills);
 
   return (
     <div>
