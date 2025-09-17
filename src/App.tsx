@@ -109,6 +109,8 @@ function App() {
     dispatch(selectBill(updatedBill));
   };
 
+  console.log("Selected:", selectedBill);
+
   return (
     <div>
       {error && (
@@ -119,7 +121,7 @@ function App() {
       
       {loading && (
         <div className="loading" style={{ margin: '10px 0' }}>
-          Загрузка...
+          Loading...
         </div>
       )}
       
