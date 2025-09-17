@@ -41,6 +41,10 @@
   background-color: var(--danger-color);
 }
 
+.button.delete {
+  background-color: var(--danger-color);
+}
+
 .button:hover {
   filter: brightness(1.1);
 }
