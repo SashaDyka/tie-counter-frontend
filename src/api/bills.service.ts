@@ -22,6 +22,7 @@ export const fetchBillById = async (id: number) => {
   }
 };
 
+//USE WITH DTO
 export const createBill = async (billData: any) => {
   try {
     const response = await axios.post(API_URL, billData);

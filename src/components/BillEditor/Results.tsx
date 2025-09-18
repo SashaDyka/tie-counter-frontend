@@ -10,7 +10,6 @@ interface ResultsProps {
 }
 
 const Results: React.FC<ResultsProps> = ({ tipAmount, amountPerPerson, totalAmound, people }) => {
-  console.log("totalAmound in Results: ", totalAmound);
   return (
     <div className={styles.resultsBox}>
       <h3>Results:</h3>

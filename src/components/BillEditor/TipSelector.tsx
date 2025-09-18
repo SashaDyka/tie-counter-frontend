@@ -8,9 +8,7 @@ interface TipSelectorProps {
 }
 
 const TipSelector: React.FC<TipSelectorProps> = ({ value, onChange }) => {
-    console.log('Tio %:', value);
     const options = [5, 10, 15];
-
 
   return (
      <div>
