@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { BillUI } from '../../utils/mappers.ts';
+import type { BillUI } from '../../utils/mapper.toFrontend.ts';
 
 
 interface BillsState {
