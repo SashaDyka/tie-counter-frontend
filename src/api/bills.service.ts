@@ -34,7 +34,7 @@ export const createBill = async (billData: any) => {
 
 export const updateBill = async (id: number, billData: any) => {
   try {
-    const response = await axios.put(`${API_URL}/${id}`, billData);
+    const response = await axios.patch(`${API_URL}/${id}`, billData);
     return response.data;
   } catch (error) {
     console.error(`Error updating bill with ID ${id}:`, error);
