@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { fetchAllBills, createBill, updateBill, deleteBill } from './api/bills.service.ts';
-import { mapBillFromApi } from './utils/mappers.ts';
+import { mapBillFromApi, type BillUI } from './utils/mapper.toFrontend.ts';
+import { mapBillToApi,  } from './utils/mapper.toBackend.ts';
 import { useOnce } from './utils/hooks/useOnce.ts';
-import type { Bill } from './types/types'  //need delete
 import BillList from './components/BillList/BillList';
 import BillEditor from './components/BillEditor/BillEditor';
 
@@ -36,108 +36,60 @@ function App() {
       }
     };
 
-    //feat: custom hook
     useOnce(() => {
       loadBills();
     });
 
 
   const handleCreateBill = () => {
-    const tempBill: Bill = {
+    const tempBill: BillUI = {
       id: 0, 
       totalAmount: 0,
-      tipPercent: 10,
-      peopleCount: 1,
+      tipPercent: 0,
+      peopleCount: 0,
       people: [],
     };
     
     dispatch(selectBill(tempBill));
   };
 
-  const transformToBackendFormat = (bill: Bill) => {
-  const peopleToAdd = bill.people
-    .filter(p => !p.id || p.id === 0)
-    .map(p => ({
-      name: p.name,
-      individualAmount: p.tipAmount ?? undefined,
-      individualTipPercentage:
-        p.tipPercent === bill.tipPercent ? undefined : p.tipPercent,
-    }));
-
-  const peopleToUpdate = bill.people
-    .filter(p => p.id && p.id !== 0)
-    .map(p => ({
-      id: p.id,
-      name: p.name,
-      individualAmount: p.tipAmount ?? undefined,
-      individualTipPercentage:
-        p.tipPercent === bill.tipPercent ? undefined : p.tipPercent,
-    }));
-
-  // TODO: add people remove logic
-  const peopleToRemove: number[] = [];
-
-  return {
-    totalAmount: bill.totalAmount,
-    defaultTipPercentage: bill.tipPercent,
-    peopleToAdd,
-    peopleToUpdate,
-    peopleToRemove,
-  };
-};
 
 
-  const transformToFrontendFormat = (apiBill: any): Bill => {
-    return {
-      id: apiBill.id,
-      totalAmount: apiBill.totalAmount,
-      tipPercent: apiBill.defaultTipPercentage,
-      peopleCount: apiBill.people.length,
-      people: apiBill.people.map((person: any) => ({
-        id: person.id,
-        name: person.name,
-        tipAmount: person.individualAmount ?? null,
-        tipPercent: person.individualTipPercentage ?? null,
-      }))
-    };
-  };
+  const handleSaveBill = async (billToSave: BillUI) => {
+    console.log("✔️ Bill to save:", billToSave);
+    setLoading(true);
+    setError(null);
+    try {
+      const backendData = mapBillToApi(billToSave);
+      console.log("Transformed to backend format:", backendData);
 
+      if (billToSave.id === 0) {
+        const createdBillFromApi = await createBill(backendData);
+        console.log("Created bill from API:", createdBillFromApi);
 
-  const handleSaveBill = async (billToSave: Bill) => {
-  console.log("✔️ Bill to save:", billToSave);
-  setLoading(true);
-  setError(null);
-  try {
-    const backendData = transformToBackendFormat(billToSave);
-    console.log("Transformed to backend format:", backendData);
+        const createdBill = mapBillFromApi(createdBillFromApi);
+        console.log("Created bill transformed to frontend:", createdBill);
 
-    if (billToSave.id === 0) {
-      const createdBillFromApi = await createBill(backendData);
-      console.log("Created bill from API:", createdBillFromApi);
+        dispatch(addBill(createdBill));
+      } else {
+        const updatedBillFromApi = await updateBill(billToSave.id, backendData);
+        console.log("Updated bill from API:", updatedBillFromApi);
 
-      const createdBill = transformToFrontendFormat(createdBillFromApi);
-      console.log("Created bill transformed to frontend:", createdBill);
+        const updatedBill = mapBillFromApi(updatedBillFromApi);
+        console.log("Updated bill transformed to frontend:", updatedBill);
 
-      dispatch(addBill(createdBill));
-    } else {
-      const updatedBillFromApi = await updateBill(billToSave.id, backendData);
-      console.log("Updated bill from API:", updatedBillFromApi);
+        dispatch(updateBillInStore(updatedBill));
+      }
 
-      const updatedBill = transformToFrontendFormat(updatedBillFromApi);
-      console.log("Updated bill transformed to frontend:", updatedBill);
-
-      dispatch(updateBillInStore(updatedBill));
+      dispatch(selectBill(null));
+    } catch (error: any) {
+      const msg = error.response?.data?.message || error.message || 'Error saving bill';
+      console.error(msg);
+      setError(msg);
+    } finally {
+      setLoading(false);
     }
-
-    dispatch(selectBill(null));
-  } catch (error: any) {
-    const msg = error.response?.data?.message || error.message || 'Error saving bill';
-    console.error(msg);
-    setError(msg);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
 
 
@@ -147,7 +99,6 @@ function App() {
     }
     setLoading(true);
     setError(null);
-
     try {
       await deleteBill(id);
       dispatch(deletedBill(id));
@@ -166,7 +117,7 @@ function App() {
     dispatch(selectBill(null));
   };
 
-  const handleUpdateBill = (updatedBill: Bill) => {
+  const handleUpdateBill = (updatedBill: BillUI) => {
     dispatch(selectBill(updatedBill));
   };
 
