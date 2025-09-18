@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import { fetchAllBills, createBill, updateBill, deleteBill } from './api/bills.service.ts';
+import { mapBillFromApi } from './utils/mappers.ts';
+
 import type { Bill } from './types/types'
 import BillList from './components/BillList/BillList';
 import BillEditor from './components/BillEditor/BillEditor';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { setBills, selectBill, addBill, updateBillInStore, deletedBill } from './features/bills/billsSlice';
 import type { RootState } from './app/store'; 
@@ -16,23 +19,12 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
 
-  useEffect(() => {
     const loadBills = async () => {
       setLoading(true);
       setError(null);
       try {
         const fetchedBills = await fetchAllBills();
-        const normalizedBills: Bill[] = fetchedBills.map((bill: any) => ({
-          ...bill,
-          tipPercent: bill.defaultTipPercentage ?? 0,
-          peopleCount: bill.people?.length ?? 0,
-          people: (bill.people || []).map((person: any) => ({
-            ...person,
-            tipPercent: person.individualTipPercentage ?? bill.defaultTipPercentage ?? 0,
-            tipAmount: person.individualAmount ?? 0,
-          })),
-        }));
-
+        const normalizedBills = fetchedBills.map(mapBillFromApi);
         dispatch(setBills(normalizedBills));
       } catch (error) {
         console.error('Failed to fetch bills:', error);
@@ -41,8 +33,6 @@ function App() {
         setLoading(false);
       }
     };
-    loadBills();
-  }, [dispatch]);
 
 
   const handleCreateBill = () => {
@@ -201,7 +191,7 @@ function App() {
       ) : (
         <>
           <BillList 
-            bills={bills} 
+            bills={bills} //TODO: BillList must be subscribed to bills from the store. 
             onSelectBill={(bill) => dispatch(selectBill(bill))} 
             loading={loading}
           />
