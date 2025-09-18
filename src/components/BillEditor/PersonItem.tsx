@@ -26,12 +26,14 @@ const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
   const handleToggleTipType = () => {
     const newCustomAmount = !customAmount;
     setCustomAmount(newCustomAmount);
+
     if (newCustomAmount) {
-      setTipPercent(0);
-    } else {
       setTipAmount(0);
+    } else {
+      setTipPercent(0);
     }
   };
+
 
   return (
    <div className={styles.container}>
@@ -57,10 +59,18 @@ const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
           className={styles.input}
           type="number"
           value={customAmount ? tipAmount : tipPercent}
-          onChange={(e) => setTipPercent(Number(e.target.value))}
+          onChange={(e) => {
+            const val = Number(e.target.value);
+            if (customAmount) {
+              setTipAmount(val);
+            } else {
+              setTipPercent(val);
+            }
+          }}
           onBlur={handleUpdate}
           onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
         />
+
       </div>
       <button className={styles.button} onClick={handleToggleTipType}>
         {customAmount ? 'Use %' : 'Use amount'}
