@@ -1,12 +1,12 @@
 import React from 'react';
-import type { Bill } from '../../types/types';
+import type { BillUI } from '../../utils/mapper.toFrontend.ts';
 import BillListItem from './BillListItem';
 import styles from './BillList.module.css';
 
 
 interface BillListProps{
-    bills: Bill[];
-  onSelectBill: (bill: Bill) => void;
+  bills: BillUI[];
+  onSelectBill: (bill: BillUI) => void;
   loading?: boolean;
 }
 

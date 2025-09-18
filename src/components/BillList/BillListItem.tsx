@@ -1,11 +1,11 @@
 import React from 'react';
-import type { Bill } from '../../types/types';
+import type { BillUI } from '../../utils/mapper.toFrontend.ts';
 import styles from './BillListItem.module.css';
 
 
 interface BillListItemProps {
-  bill: Bill;
-  onSelectBill: (bill: Bill) => void;
+  bill: BillUI;
+  onSelectBill: (bill: BillUI) => void;
 }
 
 const BillListItem: React.FC<BillListItemProps> = ({ bill, onSelectBill }) => {
