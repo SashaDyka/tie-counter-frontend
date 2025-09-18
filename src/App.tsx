@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useState } from 'react'
 import { fetchAllBills, createBill, updateBill, deleteBill } from './api/bills.service.ts';
 import { mapBillFromApi, type BillUI } from './utils/mapper.toFrontend.ts';
 import { mapBillToApi,  } from './utils/mapper.toBackend.ts';
@@ -54,7 +55,7 @@ function App() {
   };
 
 
-
+//status code: 500
   const handleSaveBill = async (billToSave: BillUI) => {
     console.log("✔️ Bill to save:", billToSave);
     setLoading(true);
@@ -124,6 +125,7 @@ function App() {
   console.log("Tip % in App:", bills);
 
   return (
+    <BrowserRouter>
     <div>
       {error && (
         <div className="error-message" style={{ color: 'red', margin: '10px 0' }}>
@@ -137,32 +139,40 @@ function App() {
         </div>
       )}
       
-      {selectedBill ? (
-        <BillEditor 
-          bill={selectedBill}
-          onSave={handleSaveBill}
-          onCancel={handleCloseBill} 
-          onDelete={handleDeleteBill}
-          onUpdate={handleUpdateBill}
-          loading={loading}
-        />
-      ) : (
-        <>
-          <BillList 
-            bills={bills} //TODO: BillList must be subscribed to bills from the store. 
-            onSelectBill={(bill) => dispatch(selectBill(bill))} 
-            loading={loading}
-          />
-          <button 
-            className="button-create" 
-            onClick={handleCreateBill}
-            disabled={loading}
-          >
-            Create Bill
-          </button>
-        </>
-      )}
+    
+    
+    <Routes>
+      <Route path="/" element={<BillList bills={bills} //TODO: BillList must be subscribed to bills from the store. 
+        onSelectBill={(bill) => dispatch(selectBill(bill))} 
+        loading={loading}/>} />
+
+      <Route path="/bills/:id" element={<BillEditor bill={selectedBill}
+        onSave={handleSaveBill}
+        onCancel={handleCloseBill} 
+        onDelete={handleDeleteBill}
+        onUpdate={handleUpdateBill}
+        loading={loading}/>} />
+        
+      <Route path="/bills/create" element={<BillEditor bill={selectedBill}
+        onSave={handleSaveBill}
+        onCancel={handleCloseBill} 
+        onDelete={handleDeleteBill}
+        onUpdate={handleUpdateBill}
+        loading={loading}/>} />    
+    </Routes>
+
+     <>
+      <button 
+        className="button-create" 
+        onClick={handleCreateBill}
+        disabled={loading}
+      >
+        Create Bill
+      </button>
+      </>
+
     </div>
+    </BrowserRouter>
   )
 }
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import type { Bill, Person } from '../../types/types';
 import type { BillUI } from '../../utils/mapper.toFrontend.ts';
 import BillInput from './BillInput';
@@ -9,7 +10,7 @@ import Results from './Results';
 import styles from './BillEditor.module.css';
 
 interface BillEditorProps {  
-  bill: BillUI; 
+  bill: BillUI | null; 
   onSave: (updatedBill: BillUI) => void; 
   onCancel: () => void;
   onUpdate?: (updatedBill: BillUI) => void;
