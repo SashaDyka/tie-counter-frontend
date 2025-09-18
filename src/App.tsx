@@ -15,35 +15,34 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+
   useEffect(() => {
     const loadBills = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const fetchedBills = await fetchAllBills();
+      setLoading(true);
+      setError(null);
+      try {
+        const fetchedBills = await fetchAllBills();
+        const normalizedBills: Bill[] = fetchedBills.map((bill: any) => ({
+          ...bill,
+          tipPercent: bill.defaultTipPercentage ?? 0,
+          peopleCount: bill.people?.length ?? 0,
+          people: (bill.people || []).map((person: any) => ({
+            ...person,
+            tipPercent: person.individualTipPercentage ?? bill.defaultTipPercentage ?? 0,
+            tipAmount: person.individualAmount ?? 0,
+          })),
+        }));
 
-      const normalizedBills: Bill[] = fetchedBills.map((bill: any) => ({
-        ...bill,
-        tipPercent: bill.defaultTipPercentage ?? 0,
-        peopleCount: bill.people?.length ?? 0,
-        people: (bill.people || []).map((person: any) => ({
-          ...person,
-          tipPercent: person.individualTipPercentage ?? bill.defaultTipPercentage ?? 0,
-          tipAmount: person.individualAmount ?? 0,
-        })),
-      }));
-
-      dispatch(setBills(normalizedBills));
-    } catch (error) {
-      console.error('Failed to fetch bills:', error);
-      setError('Can not fetch bills');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  loadBills();
-}, [dispatch]);
+        dispatch(setBills(normalizedBills));
+      } catch (error) {
+        console.error('Failed to fetch bills:', error);
+        setError('Can not fetch bills');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadBills();
+  }, [dispatch]);
 
 
   const handleCreateBill = () => {
@@ -58,18 +57,38 @@ function App() {
     dispatch(selectBill(tempBill));
   };
 
-  
   const transformToBackendFormat = (bill: Bill) => {
-    return {
-      totalAmount: bill.totalAmount,
-      defaultTipPercentage: bill.tipPercent,
-      people: bill.people.map(person => ({
-        name: person.name,
-        individualAmount: person.tipAmount ?? undefined,
-        individualTipPercentage: person.tipPercent ?? undefined,
-      })),
-    };
+  const peopleToAdd = bill.people
+    .filter(p => !p.id || p.id === 0)
+    .map(p => ({
+      name: p.name,
+      individualAmount: p.tipAmount ?? undefined,
+      individualTipPercentage:
+        p.tipPercent === bill.tipPercent ? undefined : p.tipPercent,
+    }));
+
+  const peopleToUpdate = bill.people
+    .filter(p => p.id && p.id !== 0)
+    .map(p => ({
+      id: p.id,
+      name: p.name,
+      individualAmount: p.tipAmount ?? undefined,
+      individualTipPercentage:
+        p.tipPercent === bill.tipPercent ? undefined : p.tipPercent,
+    }));
+
+  // TODO: add people remove logic
+  const peopleToRemove: number[] = [];
+
+  return {
+    totalAmount: bill.totalAmount,
+    defaultTipPercentage: bill.tipPercent,
+    peopleToAdd,
+    peopleToUpdate,
+    peopleToRemove,
   };
+};
+
 
   const transformToFrontendFormat = (apiBill: any): Bill => {
     return {
@@ -154,7 +173,7 @@ function App() {
     dispatch(selectBill(updatedBill));
   };
 
-  //console.log("Tip %:", bills);
+  console.log("Tip % in App:", bills);
 
   return (
     <div>
