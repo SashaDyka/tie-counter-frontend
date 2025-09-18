@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Bill, Person } from '../../types/types';
+import type { BillUI } from '../../utils/mapper.toFrontend.ts';
 import BillInput from './BillInput';
 import TipSelector from './TipSelector';
 import PeopleCountInput from './PeopleCountInput';
@@ -8,10 +9,10 @@ import Results from './Results';
 import styles from './BillEditor.module.css';
 
 interface BillEditorProps {  
-  bill: Bill; 
-  onSave: (updatedBill: Bill) => void; 
+  bill: BillUI; 
+  onSave: (updatedBill: BillUI) => void; 
   onCancel: () => void;
-  onUpdate?: (updatedBill: Bill) => void;
+  onUpdate?: (updatedBill: BillUI) => void;
   onDelete: (id: number) => void;
   loading?: boolean;
 }
@@ -32,7 +33,6 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelet
     setTipPercent(bill.tipPercent);
     setPeopleCount(bill.peopleCount);
     setPeople(bill.people || []);    
-    //console.log('People count:', peopleCount);
   }, [bill]);
 
 
@@ -141,7 +141,7 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelet
     }
   };
 
-    console.log('BillEditor send tipAmound', bill);
+    //console.log('BillEditor send tipAmound', bill);
 
 
   return (
