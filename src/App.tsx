@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { fetchAllBills, createBill, updateBill, deleteBill } from './api/bills.service.ts';
 import { mapBillFromApi } from './utils/mappers.ts';
-
-import type { Bill } from './types/types'
+import { useOnce } from './utils/hooks/useOnce.ts';
+import type { Bill } from './types/types'  //need delete
 import BillList from './components/BillList/BillList';
 import BillEditor from './components/BillEditor/BillEditor';
 
@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setBills, selectBill, addBill, updateBillInStore, deletedBill } from './features/bills/billsSlice';
 import type { RootState } from './app/store'; 
 import './styles.css';
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -33,6 +35,11 @@ function App() {
         setLoading(false);
       }
     };
+
+    //feat: custom hook
+    useOnce(() => {
+      loadBills();
+    });
 
 
   const handleCreateBill = () => {
