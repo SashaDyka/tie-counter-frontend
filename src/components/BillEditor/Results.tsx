@@ -10,12 +10,12 @@ interface ResultsProps {
 }
 
 const Results: React.FC<ResultsProps> = ({ tipAmount, amountPerPerson, totalAmound, people }) => {
-
+  console.log("totalAmound in Results: ", totalAmound);
   return (
     <div className={styles.resultsBox}>
       <h3>Results:</h3>
       <p className={styles.perPerson}>Tip amount: {tipAmount.toFixed(2)}</p>
-      <p className={styles.totalTip}>Total amount: {amountPerPerson.toFixed(2)}</p>
+      <p className={styles.totalTip}>Total amount: {totalAmound.toFixed(2)}</p>
       <p className={styles.perPerson}>How much each person pays: </p>
       
       <ul className={styles.personList}>
