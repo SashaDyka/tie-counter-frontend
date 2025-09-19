@@ -5,12 +5,14 @@ export interface BillUI {
   totalAmount: number;       
   tipPercent: number; 
   peopleCount: number;    
-  people: {
-    id: number;
-    name: string;
-    individualAmount: number;
-    individualTipPercentage: number;
-  }[];
+  people: PersonUI[];
+}
+
+export interface PersonUI {
+  id: number;
+  name: string;
+  individualAmount: number;
+  individualTipPercentage: number;
 }
 
 export const mapBillFromApi = (bill: BillResponseDto): BillUI => {
