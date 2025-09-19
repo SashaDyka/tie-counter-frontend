@@ -1,7 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { BillUI } from '../../utils/mapper.toFrontend.ts';
-
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { BillUI } from "../../utils/mapper.toFrontend.ts";
 
 interface BillsState {
   bills: BillUI[];
@@ -13,10 +12,9 @@ const initialState: BillsState = {
   selectedBill: null,
 };
 
-//action need works with service?
-//actions work correct??
+
 const billsSlice = createSlice({
-  name: 'bills',
+  name: "bills",
   initialState,
   reducers: {
     setBills: (state, action: PayloadAction<BillUI[]>) => {
@@ -29,16 +27,19 @@ const billsSlice = createSlice({
       state.bills.push(action.payload);
     },
     updateBillInStore: (state, action: PayloadAction<BillUI>) => {
-      const index = state.bills.findIndex(bill => bill.id === action.payload.id);
+      const index = state.bills.findIndex(
+        (bill) => bill.id === action.payload.id,
+      );
       if (index !== -1) {
         state.bills[index] = action.payload;
       }
     },
     deletedBill: (state, action: PayloadAction<number>) => {
-      state.bills = state.bills.filter(bill => bill.id !== action.payload);
+      state.bills = state.bills.filter((bill) => bill.id !== action.payload);
     },
   },
 });
 
-export const { setBills, selectBill, addBill, updateBillInStore, deletedBill } = billsSlice.actions;
+export const { setBills, selectBill, addBill, updateBillInStore, deletedBill } =
+  billsSlice.actions;
 export default billsSlice.reducer;

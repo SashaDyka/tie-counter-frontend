@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import type { PersonUI } from '../../utils/mapper.toFrontend.ts';
-import styles from './PersonItem.module.css';
+import React, { useState } from "react";
+import type { PersonUI } from "../../utils/mapper.toFrontend.ts";
+import styles from "./PersonItem.module.css";
 
 interface PersonItemProps {
   person: PersonUI;
@@ -9,7 +9,7 @@ interface PersonItemProps {
 }
 
 const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
-  const [name, setName] = useState(person.name || '');
+  const [name, setName] = useState(person.name || "");
   const [tipPercent, setTipPercent] = useState(person.tipPercent || 0);
   const [tipAmount, setTipAmount] = useState(person.tipAmount || 0);
   const [customAmount, setCustomAmount] = useState(false);
@@ -34,26 +34,23 @@ const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
     }
   };
 
-
   return (
-   <div className={styles.container}>
+    <div className={styles.container}>
       <div className={styles.inputGroup}>
-        <label className={styles.label}>
-          Person name {index + 1}:
-        </label>
+        <label className={styles.label}>Person name {index + 1}:</label>
         <input
           className={styles.input}
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           onBlur={handleUpdate}
-          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+          onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
         />
       </div>
-      
+
       <div className={styles.inputGroup}>
         <label className={styles.label}>
-          {customAmount ? 'Your amount:' : 'Tip percentage'}:
+          {customAmount ? "Your amount:" : "Tip percentage"}:
         </label>
         <input
           className={styles.input}
@@ -68,16 +65,14 @@ const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {
             }
           }}
           onBlur={handleUpdate}
-          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+          onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
         />
-
       </div>
       <button className={styles.button} onClick={handleToggleTipType}>
-        {customAmount ? 'Use %' : 'Use amount'}
+        {customAmount ? "Use %" : "Use amount"}
       </button>
     </div>
   );
 };
-
 
 export default PersonItem;

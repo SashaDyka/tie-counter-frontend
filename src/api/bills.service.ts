@@ -1,13 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:3000/bills'; 
+const API_URL = "http://localhost:3000/bills";
 
 export const fetchAllBills = async () => {
   try {
     const response = await axios.get(API_URL);
     return response.data;
   } catch (error) {
-    console.error('Error fetching bills:', error);
+    console.error("Error fetching bills:", error);
     throw error;
   }
 };
@@ -22,13 +22,12 @@ export const fetchBillById = async (id: number) => {
   }
 };
 
-//USE WITH DTO
 export const createBill = async (billData: any) => {
   try {
     const response = await axios.post(API_URL, billData);
     return response.data;
   } catch (error) {
-    console.error('Error creating bill:', error);
+    console.error("Error creating bill:", error);
     throw error;
   }
 };
@@ -52,4 +51,3 @@ export const deleteBill = async (id: number) => {
     throw error;
   }
 };
-

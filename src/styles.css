@@ -10,16 +10,19 @@
   --border-color: #ced4da;
   --border-radius: 8px;
   --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
 }
 
-
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
-  display: flex; 
+  display: flex;
   justify-content: center;
   align-items: center;
   font-family: var(--font-family);
@@ -37,7 +40,10 @@ button {
   background-color: var(--surface-color);
   color: var(--text-color);
   cursor: pointer;
-  transition: border-color 0.25s, transform 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.25s,
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 button:hover {
@@ -53,10 +59,9 @@ button:focus-visible {
   box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.5);
 }
 
-.button-create{
-   margin-top: 15px;
-   margin-left: 240px;
-
+.button-create {
+  margin-top: 15px;
+  margin-left: 240px;
 }
 
 h1 {

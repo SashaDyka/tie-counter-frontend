@@ -5,7 +5,7 @@ export interface CreateParticipantDto {
 }
 
 export interface UpdateParticipantDto {
-  id: number; 
+  id: number;
   name?: string;
   individualAmount?: number;
   individualTipPercentage?: number;
@@ -16,7 +16,7 @@ export interface UpdateBillDto {
   defaultTipPercentage?: number;
   peopleToAdd?: CreateParticipantDto[];
   peopleToUpdate?: UpdateParticipantDto[];
-  peopleToRemove?: number[]; 
+  peopleToRemove?: number[];
 }
 
 export interface CreateBillDto {
