@@ -22,6 +22,17 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   const loadBills = async () => {
+<<<<<<< HEAD
+    setLoading(true);
+    setError(null);
+    try {
+      const fetchedBills = await fetchAllBills();
+      const normalizedBills = fetchedBills.map(mapBillFromApi);
+      dispatch(setBills(normalizedBills));
+    } catch (error) {
+      console.error("Failed to fetch bills:", error);
+      setError("Can not fetch bills");
+=======
     setLoading(true);
     setError(null);
     try {
@@ -36,6 +47,62 @@ function App() {
     }
   };
 
+  useOnce(() => {
+    loadBills();
+  });
+
+  const handleCreateBill = () => {
+    const tempBill: BillUI = {
+      id: 0,
+      totalAmount: 0,
+      tipPercent: 0,
+      peopleCount: 0,
+      people: [],
+    };
+
+    dispatch(selectBill(tempBill));
+  };
+
+  //status code: 500
+  const handleSaveBill = async (billToSave: BillUI) => {
+    console.log("✔️ Bill to save:", billToSave);
+    setLoading(true);
+    setError(null);
+    try {
+      const backendData = mapBillToApi(billToSave);
+      console.log("Transformed to backend format:", backendData);
+
+      if (billToSave.id === 0) {
+        const createdBillFromApi = await createBill(backendData);
+        console.log("Created bill from API:", createdBillFromApi);
+
+        const createdBill = mapBillFromApi(createdBillFromApi);
+        console.log("Created bill transformed to frontend:", createdBill);
+
+        dispatch(addBill(createdBill));
+      } else {
+        const updatedBillFromApi = await updateBill(billToSave.id, backendData);
+        console.log("Updated bill from API:", updatedBillFromApi);
+
+        const updatedBill = mapBillFromApi(updatedBillFromApi);
+        console.log("Updated bill transformed to frontend:", updatedBill);
+
+        dispatch(updateBillInStore(updatedBill));
+      }
+
+      dispatch(selectBill(null));
+    } catch (error: any) {
+      const msg =
+        error.response?.data?.message || error.message || "Error saving bill";
+      console.error(msg);
+      setError(msg);
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
+    } finally {
+      setLoading(false);
+    }
+  };
+
+<<<<<<< HEAD
   useOnce(() => {
     loadBills();
   });
@@ -80,6 +147,8 @@ function App() {
       }
     };
 
+=======
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
   const handleDeleteBill = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this bill?")) {
       return;
@@ -133,6 +202,11 @@ function App() {
             path="/"
             element={
               <BillList
+<<<<<<< HEAD
+=======
+                bills={bills} //TODO: BillList must be subscribed to bills from the store.
+                onSelectBill={(bill) => dispatch(selectBill(bill))}
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
                 loading={loading}
               />
             }
