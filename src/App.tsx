@@ -22,6 +22,17 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   const loadBills = async () => {
+<<<<<<< HEAD
+    setLoading(true);
+    setError(null);
+    try {
+      const fetchedBills = await fetchAllBills();
+      const normalizedBills = fetchedBills.map(mapBillFromApi);
+      dispatch(setBills(normalizedBills));
+    } catch (error) {
+      console.error("Failed to fetch bills:", error);
+      setError("Can not fetch bills");
+=======
     setLoading(true);
     setError(null);
     try {
@@ -84,11 +95,59 @@ function App() {
         error.response?.data?.message || error.message || "Error saving bill";
       console.error(msg);
       setError(msg);
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
     } finally {
       setLoading(false);
     }
   };
 
+<<<<<<< HEAD
+  useOnce(() => {
+    loadBills();
+  });
+
+  const handleCreateBill = () => {
+    const tempBill: BillUI = {
+      id: 0,
+      totalAmount: 0,
+      tipPercent: 0,
+      peopleCount: 0,
+      people: [],
+    };
+
+    dispatch(selectBill(tempBill));
+  };
+
+
+  const handleSaveBill = async (billToSave: BillUI) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const backendData = mapBillToApi(billToSave);
+
+      if (billToSave.id === 0) {
+        const createdBillFromApi = await createBill(backendData);
+        const createdBill = mapBillFromApi(createdBillFromApi);
+        dispatch(addBill(createdBill));
+      } else {
+        const updatedBillFromApi = await updateBill(billToSave.id, backendData);
+        const updatedBill = mapBillFromApi(updatedBillFromApi);
+        dispatch(updateBillInStore(updatedBill));
+      }
+
+      dispatch(selectBill(null));
+      } catch (error: any) {
+        const msg =
+          error.response?.data?.message || error.message || "Error saving bill";
+        console.error(msg);
+        setError(msg);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+=======
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
   const handleDeleteBill = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this bill?")) {
       return;
@@ -118,7 +177,6 @@ function App() {
     dispatch(selectBill(updatedBill));
   };
 
-  console.log("Tip % in App:", bills);
 
   return (
     <BrowserRouter>
@@ -143,8 +201,11 @@ function App() {
             path="/"
             element={
               <BillList
+<<<<<<< HEAD
+=======
                 bills={bills} //TODO: BillList must be subscribed to bills from the store.
                 onSelectBill={(bill) => dispatch(selectBill(bill))}
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
                 loading={loading}
               />
             }

@@ -12,6 +12,11 @@ import PeopleList from "./PeopleList";
 import Results from "./Results";
 import styles from "./BillEditor.module.css";
 
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
 interface BillEditorProps {
   onSave: (updatedBill: BillUI) => void;
   onCancel: () => void;
@@ -20,18 +25,31 @@ interface BillEditorProps {
   loading?: boolean;
 }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
 const BillEditor: React.FC<BillEditorProps> = ({ onSave, onCancel, onDelete,}) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+<<<<<<< HEAD
+  const bill = useSelector((state: RootState) => state.bills.bills.find(b => b.id === Number(id)));
+=======
   const bill = useSelector((state: RootState) =>
     state.bills.bills.find(b => b.id === Number(id))
   );
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
   if (!bill) {
     return <p>Bill not found</p>;
   }
 
+<<<<<<< HEAD
+  const [billAmount, setBillAmount] = useState(bill.totalAmount);
+  const [tipPercent, setTipPercent] = useState(bill.tipPercent);
+  const [peopleCount, setPeopleCount] = useState(bill.peopleCount);
+  const [people, setPeople] = useState<PersonUI[]>(bill.people.length ? bill.people : [], );
+=======
 
   const [billAmount, setBillAmount] = useState(bill.totalAmount);
   const [tipPercent, setTipPercent] = useState(bill.tipPercent);
@@ -40,6 +58,7 @@ const BillEditor: React.FC<BillEditorProps> = ({ onSave, onCancel, onDelete,}) =
     bill.people.length ? bill.people : [],
   );
 
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
   const [totalTip, setTotalTip] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalAmountPerPerson, setTotalAmountPerPerson] = useState(0);
@@ -50,6 +69,10 @@ const BillEditor: React.FC<BillEditorProps> = ({ onSave, onCancel, onDelete,}) =
     setTipPercent(bill.tipPercent);
     setPeopleCount(bill.peopleCount);
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
     if (bill.people.length) {
       setPeople(bill.people);
     } else {
@@ -63,11 +86,16 @@ const BillEditor: React.FC<BillEditorProps> = ({ onSave, onCancel, onDelete,}) =
     }
   }, [bill]);
 
+<<<<<<< HEAD
+
+  const recalculate = (amount: number, tip: number, currentPeople: PersonUI[], ) => {
+=======
   const recalculate = (
     amount: number,
     tip: number,
     currentPeople: PersonUI[],
   ) => {
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
     const result = calculateBillPreview(amount, tip, currentPeople);
     setTotalTip(result.tipAmount);
     setTotalAmount(result.totalWithTip);
@@ -75,10 +103,17 @@ const BillEditor: React.FC<BillEditorProps> = ({ onSave, onCancel, onDelete,}) =
       currentPeople.length ? result.totalWithTip / currentPeople.length : 0,
     );
   };
+<<<<<<< HEAD
+
+
+  const handleTipPercentChange = (newTipPercent: number) => {
+    setTipPercent(newTipPercent);
+=======
 
   const handleTipPercentChange = (newTipPercent: number) => {
     setTipPercent(newTipPercent);
 
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
     const updatedPeople = people.map((person) => ({
       ...person,
       individualTipPercentage: newTipPercent,
@@ -88,11 +123,15 @@ const BillEditor: React.FC<BillEditorProps> = ({ onSave, onCancel, onDelete,}) =
     recalculate(billAmount, newTipPercent, updatedPeople);
   };
 
+<<<<<<< HEAD
+  const updatePeopleArray = (currentPeople: PersonUI[], newCount: number, tipPercent: number,): PersonUI[] => {  
+=======
   const updatePeopleArray = (
     currentPeople: PersonUI[],
     newCount: number,
     tipPercent: number,
   ): PersonUI[] => {
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
     const newPeople: PersonUI[] = [];
 
     for (let i = 0; i < newCount; i++) {
@@ -167,6 +206,10 @@ const BillEditor: React.FC<BillEditorProps> = ({ onSave, onCancel, onDelete,}) =
   };
 
   const handleCancel = () => {
+<<<<<<< HEAD
+    onCancel();
+=======
+>>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
     navigate("/"); 
   };
 
