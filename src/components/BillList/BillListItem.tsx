@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 interface BillListItemProps {
   bill: BillUI;
+  isSelected: boolean;
   onSelectBill: (bill: BillUI) => void;
 }
 

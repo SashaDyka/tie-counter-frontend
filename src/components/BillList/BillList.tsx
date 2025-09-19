@@ -1,16 +1,23 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { selectBill } from "../../features/bills/billsSlice";
+import type { RootState } from "../../app/store";
+
 import type { BillUI } from "../../utils/mapper.toFrontend.ts";
 import BillListItem from "./BillListItem";
 import styles from "./BillList.module.css";
 
 interface BillListProps {
-  bills: BillUI[];
-  onSelectBill: (bill: BillUI) => void;
   loading?: boolean;
 }
 
-const BillList: React.FC<BillListProps> = ({ bills, onSelectBill }) => {
+const BillList: React.FC<BillListProps> = ({ }) => {
+  const dispatch = useDispatch();
+  const bills = useSelector((state: RootState) => state.bills.bills);
+  const selectedBill = useSelector((state: RootState) => state.bills.selectedBill);
+
+  console.log("Bills from store:", bills);
+
   if (!Array.isArray(bills)) {
     console.error("Bills is not an array:", bills);
     return <p>Error loading bills. Please try again later.</p>;
@@ -27,7 +34,8 @@ const BillList: React.FC<BillListProps> = ({ bills, onSelectBill }) => {
             <BillListItem
               key={bill.id}
               bill={bill}
-              onSelectBill={onSelectBill}
+              isSelected={selectedBill?.id === bill.id}
+              onSelectBill={() => dispatch(selectBill(bill))}
             />
           ))}
         </ul>
