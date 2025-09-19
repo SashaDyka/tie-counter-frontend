@@ -11,7 +11,6 @@ interface ResultsProps {
 
 const Results: React.FC<ResultsProps> = ({
   tipAmount,
-  amountPerPerson,
   totalAmound,
   people,
 }) => {

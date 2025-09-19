@@ -52,7 +52,6 @@ function App() {
     dispatch(selectBill(tempBill));
   };
 
-  //status code: 500
   const handleSaveBill = async (billToSave: BillUI) => {
     console.log("✔️ Bill to save:", billToSave);
     setLoading(true);
