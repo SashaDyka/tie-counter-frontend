@@ -2,9 +2,9 @@ import type { BillResponseDto } from "../types/dto";
 
 export interface BillUI {
   id: number;
-  totalAmount: number;       
-  tipPercent: number; 
-  peopleCount: number;    
+  totalAmount: number;
+  tipPercent: number;
+  peopleCount: number;
   people: PersonUI[];
 }
 
@@ -21,12 +21,11 @@ export const mapBillFromApi = (bill: BillResponseDto): BillUI => {
     totalAmount: bill.totalAmount,
     tipPercent: bill.defaultTipPercentage,
     peopleCount: bill.people?.length ?? 0,
-    people: bill.people.map(p => ({
+    people: bill.people.map((p) => ({
       id: p.id,
       name: p.name,
       individualAmount: p.individualAmount,
       individualTipPercentage: p.individualTipPercentage,
-    }))
+    })),
   };
 };
-

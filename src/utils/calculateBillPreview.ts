@@ -1,8 +1,7 @@
-
 interface Participant {
   name: string;
-  individualAmount?: number;           
-  individualTipPercentage?: number; 
+  individualAmount?: number;
+  individualTipPercentage?: number;
 }
 
 interface BillResult {
@@ -14,10 +13,10 @@ interface BillResult {
 export const calculateBillPreview = (
   totalAmount: number,
   defaultTipPercent: number,
-  people: Participant[]
+  people: Participant[],
 ): BillResult => {
   let remainingAmount = totalAmount;
-  const perPersonResults = people.map(p => {
+  const perPersonResults = people.map((p) => {
     const baseAmount = p.individualAmount ?? totalAmount / people.length;
     const tipPercent = p.individualTipPercentage ?? defaultTipPercent;
     const tip = baseAmount * (tipPercent / 100);
