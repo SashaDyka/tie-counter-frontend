@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import type { Person } from '../../types/types'; 
+import type { PersonUI } from '../../utils/mapper.toFrontend.ts';
 import styles from './PersonItem.module.css';
 
 interface PersonItemProps {
-  person: Person;
+  person: PersonUI;
   index: number;
-  onUpdate: (index: number, updatedPerson: Person) => void;
+  onUpdate: (index: number, updatedPerson: PersonUI) => void;
 }
 
 const PersonItem: React.FC<PersonItemProps> = ({ person, index, onUpdate }) => {

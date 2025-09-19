@@ -1,16 +1,16 @@
 import React from 'react';
-import type { Person } from '../../types/types'; 
+import type { PersonUI } from '../../utils/mapper.toFrontend.ts';
 import PersonItem from './PersonItem'; 
 import styles from './PeopleList.module.css';
 
 interface PeopleListProps {
-    people: Person[]; 
-    onUpdatePerson: (index: number, updatedPerson: Person) => void; 
+    people: PersonUI[]; 
+    onUpdatePerson: (index: number, updatedPerson: PersonUI) => void; 
 }
 
 const PeopleList: React.FC<PeopleListProps> = ({ people, onUpdatePerson }) => {
 
-  const handleUpdate = (index: number, updatedPerson: Person) => {
+  const handleUpdate = (index: number, updatedPerson: PersonUI) => {
     onUpdatePerson(index, updatedPerson);
   };
   
