@@ -1,10 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { Bill } from '../../types/types';
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { BillUI } from "../../utils/mapper.toFrontend.ts";
 
 interface BillsState {
-  bills: Bill[];
-  selectedBill: Bill | null;
+  bills: BillUI[];
+  selectedBill: BillUI | null;
 }
 
 const initialState: BillsState = {
@@ -12,33 +12,34 @@ const initialState: BillsState = {
   selectedBill: null,
 };
 
+
 const billsSlice = createSlice({
-  name: 'bills',
+  name: "bills",
   initialState,
   reducers: {
-    setBills: (state, action: PayloadAction<Bill[]>) => {
+    setBills: (state, action: PayloadAction<BillUI[]>) => {
       state.bills = action.payload;
     },
-    selectBill: (state, action: PayloadAction<Bill | null>) => {
+    selectBill: (state, action: PayloadAction<BillUI | null>) => {
       state.selectedBill = action.payload;
     },
-    addBill: (state, action: PayloadAction<Bill>) => {
+    addBill: (state, action: PayloadAction<BillUI>) => {
       state.bills.push(action.payload);
     },
-    updateBillInStore: (state, action: PayloadAction<Bill>) => {
-      const index = state.bills.findIndex(bill => bill.id === action.payload.id);
+    updateBillInStore: (state, action: PayloadAction<BillUI>) => {
+      const index = state.bills.findIndex(
+        (bill) => bill.id === action.payload.id,
+      );
       if (index !== -1) {
         state.bills[index] = action.payload;
       }
     },
     deletedBill: (state, action: PayloadAction<number>) => {
-      state.bills = state.bills.filter(bill => bill.id !== action.payload);
+      state.bills = state.bills.filter((bill) => bill.id !== action.payload);
     },
   },
 });
 
-// Экспорт экшенов
-export const { setBills, selectBill, addBill, updateBillInStore, deletedBill } = billsSlice.actions;
-
-// Экспорт редьюсера
+export const { setBills, selectBill, addBill, updateBillInStore, deletedBill } =
+  billsSlice.actions;
 export default billsSlice.reducer;

@@ -1,18 +1,18 @@
-import React from 'react';
-import type { Bill } from '../../types/types';
-import BillListItem from './BillListItem';
-import styles from './BillList.module.css';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import type { BillUI } from "../../utils/mapper.toFrontend.ts";
+import BillListItem from "./BillListItem";
+import styles from "./BillList.module.css";
 
-
-interface BillListProps{
-    bills: Bill[];
-  onSelectBill: (bill: Bill) => void;
+interface BillListProps {
+  bills: BillUI[];
+  onSelectBill: (bill: BillUI) => void;
   loading?: boolean;
 }
 
 const BillList: React.FC<BillListProps> = ({ bills, onSelectBill }) => {
   if (!Array.isArray(bills)) {
-    console.error('Bills is not an array:', bills);
+    console.error("Bills is not an array:", bills);
     return <p>Error loading bills. Please try again later.</p>;
   }
 

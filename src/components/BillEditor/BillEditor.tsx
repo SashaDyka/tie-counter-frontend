@@ -1,102 +1,116 @@
-import { useState, useEffect } from 'react';
-import type { Bill, Person } from '../../types/types';
-import BillInput from './BillInput';
-import TipSelector from './TipSelector';
-import PeopleCountInput from './PeopleCountInput';
-import PeopleList from './PeopleList';
-import Results from './Results';
-import styles from './BillEditor.module.css';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import type { BillUI, PersonUI } from "../../utils/mapper.toFrontend.ts";
+import { calculateBillPreview } from "./../../utils/calculateBillPreview.ts";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "../../app/store";
 
-interface BillEditorProps {  
-  bill: Bill; 
-  onSave: (updatedBill: Bill) => void; 
+import BillInput from "./BillInput";
+import TipSelector from "./TipSelector";
+import PeopleCountInput from "./PeopleCountInput";
+import PeopleList from "./PeopleList";
+import Results from "./Results";
+import styles from "./BillEditor.module.css";
+
+interface BillEditorProps {
+  onSave: (updatedBill: BillUI) => void;
   onCancel: () => void;
-  onUpdate?: (updatedBill: Bill) => void;
+  onUpdate?: (updatedBill: BillUI) => void;
   onDelete: (id: number) => void;
   loading?: boolean;
 }
 
-const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelete }) => {
+
+const BillEditor: React.FC<BillEditorProps> = ({ onSave, onCancel, onDelete,}) => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const bill = useSelector((state: RootState) =>
+    state.bills.bills.find(b => b.id === Number(id))
+  );
+  if (!bill) {
+    return <p>Bill not found</p>;
+  }
+
+
   const [billAmount, setBillAmount] = useState(bill.totalAmount);
-  const [billAmountInput, setBillAmountInput] = useState(billAmount);
   const [tipPercent, setTipPercent] = useState(bill.tipPercent);
   const [peopleCount, setPeopleCount] = useState(bill.peopleCount);
-  const [people, setPeople] = useState<Person[]>(bill.people || []);
-  const [totalTip, setTotalTip] = useState<number>(0);
-  const [totalAmound, setTotalAmound] = useState(bill.totalAmount || 0);
-  const [totalAmountPerPerson, setTotalAmountPerPerson] = useState<number>(0);
+  const [people, setPeople] = useState<PersonUI[]>(
+    bill.people.length ? bill.people : [],
+  );
+
+  const [totalTip, setTotalTip] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalAmountPerPerson, setTotalAmountPerPerson] = useState(0);
+
 
   useEffect(() => {
     setBillAmount(bill.totalAmount);
-    setBillAmountInput(bill.totalAmount);
     setTipPercent(bill.tipPercent);
     setPeopleCount(bill.peopleCount);
-    setPeople(bill.people || []);    
-    //console.log('People count:', peopleCount);
+
+    if (bill.people.length) {
+      setPeople(bill.people);
+    } else {
+      const newPeople = Array.from({ length: bill.peopleCount }, (_, i) => ({
+        id: Date.now() + i,
+        name: `Person ${i + 1}`,
+        individualAmount: 0,
+        individualTipPercentage: bill.tipPercent,
+      }));
+      setPeople(newPeople);
+    }
   }, [bill]);
 
-
-  useEffect(() => {
-    setPeople(prevPeople =>
-      prevPeople.map(person => ({
-        ...person,
-        tipPercent: tipPercent,
-      }))
+  const recalculate = (
+    amount: number,
+    tip: number,
+    currentPeople: PersonUI[],
+  ) => {
+    const result = calculateBillPreview(amount, tip, currentPeople);
+    setTotalTip(result.tipAmount);
+    setTotalAmount(result.totalWithTip);
+    setTotalAmountPerPerson(
+      currentPeople.length ? result.totalWithTip / currentPeople.length : 0,
     );
-
-    handleRecalculate();
-  }, [tipPercent]);
-
-
-  const handleBillAmountChange = () => {
-    const parsed = parseFloat(String(billAmountInput));
-    if (!isNaN(parsed)) {
-      setBillAmount(parsed);
-      handleRecalculate(); 
-    }
   };
-
 
   const handleTipPercentChange = (newTipPercent: number) => {
     setTipPercent(newTipPercent);
-    const updatedPeople = people.map(person => ({
+
+    const updatedPeople = people.map((person) => ({
       ...person,
-      tipPercent: newTipPercent,
+      individualTipPercentage: newTipPercent,
     }));
     setPeople(updatedPeople);
-    handleRecalculate();
+
+    recalculate(billAmount, newTipPercent, updatedPeople);
   };
 
-
-  const handleRecalculate = () => {
-    const calculatedTip = billAmount * (tipPercent / 100);
-    setTotalTip(calculatedTip);
-
-    const totalAmountWithTip = billAmount + calculatedTip;
-    const calculatedAmountPerPerson =
-      peopleCount > 0 ? totalAmountWithTip / peopleCount : 0;
-    setTotalAmountPerPerson(calculatedAmountPerPerson);
-  };
-
-
-  const updatePeopleArray = (currentPeople: Person[], newCount: number, tipPercent: number): Person[] => {
-    const newPeople = [];
+  const updatePeopleArray = (
+    currentPeople: PersonUI[],
+    newCount: number,
+    tipPercent: number,
+  ): PersonUI[] => {
+    const newPeople: PersonUI[] = [];
 
     for (let i = 0; i < newCount; i++) {
       if (currentPeople[i]) {
         newPeople.push({
           ...currentPeople[i],
-          tipPercent: tipPercent,
+          individualTipPercentage: tipPercent,
         });
       } else {
         newPeople.push({
-          id: Date.now() + i, 
+          id: Date.now() + i,
           name: `Person ${i + 1}`,
-          tipPercent: tipPercent,
-          tipAmount: 0,
+          individualAmount: 0,
+          individualTipPercentage: tipPercent,
         });
       }
     }
+
     return newPeople;
   };
 
@@ -104,17 +118,30 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelet
     setPeopleCount(newCount);
     const updatedPeople = updatePeopleArray(people, newCount, tipPercent);
     setPeople(updatedPeople);
-    handleRecalculate();
+    recalculate(billAmount, tipPercent, updatedPeople);
   };
 
-  const handleUpdatePerson = (index: number, updatedPerson: Person) => {
-  const newPeople = [...people];
-  newPeople[index] = updatedPerson;
-  setPeople(newPeople);
-};
+  const handleBillAmountChange = (newAmount: number) => {
+    setBillAmount(newAmount);
+    recalculate(newAmount, tipPercent, people);
+  };
+
+  const handleUpdatePerson = (index: number, updatedPerson: PersonUI) => {
+    const updatedPeople = [...people];
+    updatedPeople[index] = updatedPerson;
+    setPeople(updatedPeople);
+
+    const result = calculateBillPreview(billAmount, tipPercent, updatedPeople);
+
+    setTotalTip(result.tipAmount);
+    setTotalAmount(result.totalWithTip);
+    setTotalAmountPerPerson(
+      updatedPeople.length ? result.totalWithTip / updatedPeople.length : 0,
+    );
+  };
 
   const handleSave = () => {
-    const updatedBill: Bill = {
+    const updatedBill: BillUI = {
       ...bill,
       totalAmount: billAmount,
       tipPercent: tipPercent,
@@ -122,50 +149,85 @@ const BillEditor: React.FC<BillEditorProps> = ({ bill, onSave, onCancel, onDelet
       people: people,
     };
     onSave(updatedBill);
+    navigate("/"); 
   };
 
   const handleReset = () => {
     setBillAmount(0);
     setTipPercent(0);
     setPeopleCount(1);
-    setPeople([{ id: 0, name: 'Person 1', tipPercent: 0, tipAmount: 0 }]);
+    setPeople([
+      {
+        id: 0,
+        name: "Person 1",
+        individualAmount: 0,
+        individualTipPercentage: 0,
+      },
+    ]);
   };
 
   const handleCancel = () => {
-    onCancel();
+    navigate("/"); 
   };
 
   const handleDelete = () => {
     if (bill.id !== 0) {
       onDelete(bill.id);
     }
+    navigate("/"); 
   };
-
-    console.log('BillEditor send tipAmound', bill);
-
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Bill № {bill.id === 0 ? 'New' : bill.id}</h2>
-      <BillInput value={billAmountInput} onChange={setBillAmountInput} onBlur={handleBillAmountChange}
-        onKeyDown={(e) => e.key === 'Enter' && handleRecalculate()} />
-      <TipSelector value={tipPercent} onChange={handleTipPercentChange}  />
-      <PeopleCountInput value={peopleCount} onChange={handlePeopleCountChange} />
+      <h2 className={styles.title}>Bill № {bill.id === 0 ? "New" : bill.id}</h2>
+      <BillInput
+        value={billAmount}
+        onChange={setBillAmount}
+        onBlur={() => handleBillAmountChange(billAmount)}
+        onKeyDown={(e) =>
+          e.key === "Enter" && handleBillAmountChange(billAmount)
+        }
+      />
+      <TipSelector value={tipPercent} onChange={handleTipPercentChange} />
+      <PeopleCountInput
+        value={peopleCount}
+        onChange={handlePeopleCountChange}
+      />
       <PeopleList people={people} onUpdatePerson={handleUpdatePerson} />
       <Results
         tipAmount={totalTip}
         amountPerPerson={totalAmountPerPerson}
-        totalAmound={totalAmound}
+        totalAmound={totalAmount}
         people={people}
       />
 
       <div className={styles.buttons}>
-        <button className={`${styles.button} ${styles.save}`} onClick={handleSave}>Save</button>
-        <button className={`${styles.button} ${styles.reset}`} onClick={handleReset}>Reset</button>
+        <button
+          className={`${styles.button} ${styles.save}`}
+          onClick={handleSave}
+        >
+          Save
+        </button>
+        <button
+          className={`${styles.button} ${styles.reset}`}
+          onClick={handleReset}
+        >
+          Reset
+        </button>
         {bill.id !== 0 && (
-          <button className={`${styles.button} ${styles.delete}`} onClick={handleDelete}>Delete</button>
+          <button
+            className={`${styles.button} ${styles.delete}`}
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
         )}
-        <button className={`${styles.button} ${styles.cancel}`} onClick={handleCancel}>Cancel</button>
+        <button
+          className={`${styles.button} ${styles.cancel}`}
+          onClick={handleCancel}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );

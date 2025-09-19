@@ -1,16 +1,19 @@
-import React from 'react';
-import type { Bill } from '../../types/types';
-import styles from './BillListItem.module.css';
-
+import React from "react";
+import type { BillUI } from "../../utils/mapper.toFrontend.ts";
+import styles from "./BillListItem.module.css";
+import { useNavigate } from "react-router-dom";
 
 interface BillListItemProps {
-  bill: Bill;
-  onSelectBill: (bill: Bill) => void;
+  bill: BillUI;
+  onSelectBill: (bill: BillUI) => void;
 }
 
 const BillListItem: React.FC<BillListItemProps> = ({ bill, onSelectBill }) => {
+const navigate = useNavigate();
+
   const handleClick = () => {
     onSelectBill(bill);
+    navigate(`bills/${bill.id}`)
   };
 
   return (
@@ -26,7 +29,7 @@ const BillListItem: React.FC<BillListItemProps> = ({ bill, onSelectBill }) => {
           <div>
             <span>People:</span>
             <ul className={styles.peopleList}>
-              {bill.people.map(person => (
+              {bill.people.map((person) => (
                 <li key={person.id}>{person.name}</li>
               ))}
             </ul>
