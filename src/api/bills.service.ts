@@ -1,8 +1,5 @@
 import axios from "axios";
-<<<<<<< HEAD
 import type { CreateBillDto, UpdateBillDto, BillResponseDto, } from "../types/dto";
-=======
->>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
 
 const API_URL = "http://localhost:3000/bills";
 
@@ -26,11 +23,7 @@ export const fetchBillById = async (id: number): Promise<BillResponseDto> => {
   }
 };
 
-<<<<<<< HEAD
 export const createBill = async (billData: CreateBillDto): Promise<BillResponseDto> => {
-=======
-export const createBill = async (billData: any) => {
->>>>>>> 89c7bfb593c5fded2553e48516b451209d80b107
   try {
     const response = await axios.post<BillResponseDto>(API_URL, billData);
     return response.data;
