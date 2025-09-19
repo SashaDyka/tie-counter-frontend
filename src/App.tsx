@@ -52,43 +52,33 @@ function App() {
     dispatch(selectBill(tempBill));
   };
 
-  //status code: 500
+
   const handleSaveBill = async (billToSave: BillUI) => {
-    console.log("✔️ Bill to save:", billToSave);
     setLoading(true);
     setError(null);
     try {
       const backendData = mapBillToApi(billToSave);
-      console.log("Transformed to backend format:", backendData);
 
       if (billToSave.id === 0) {
         const createdBillFromApi = await createBill(backendData);
-        console.log("Created bill from API:", createdBillFromApi);
-
         const createdBill = mapBillFromApi(createdBillFromApi);
-        console.log("Created bill transformed to frontend:", createdBill);
-
         dispatch(addBill(createdBill));
       } else {
         const updatedBillFromApi = await updateBill(billToSave.id, backendData);
-        console.log("Updated bill from API:", updatedBillFromApi);
-
         const updatedBill = mapBillFromApi(updatedBillFromApi);
-        console.log("Updated bill transformed to frontend:", updatedBill);
-
         dispatch(updateBillInStore(updatedBill));
       }
 
       dispatch(selectBill(null));
-    } catch (error: any) {
-      const msg =
-        error.response?.data?.message || error.message || "Error saving bill";
-      console.error(msg);
-      setError(msg);
-    } finally {
-      setLoading(false);
-    }
-  };
+      } catch (error: any) {
+        const msg =
+          error.response?.data?.message || error.message || "Error saving bill";
+        console.error(msg);
+        setError(msg);
+      } finally {
+        setLoading(false);
+      }
+    };
 
   const handleDeleteBill = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this bill?")) {
@@ -119,7 +109,6 @@ function App() {
     dispatch(selectBill(updatedBill));
   };
 
-  console.log("Tip % in App:", bills);
 
   return (
     <BrowserRouter>
@@ -144,8 +133,6 @@ function App() {
             path="/"
             element={
               <BillList
-                bills={bills} //TODO: BillList must be subscribed to bills from the store.
-                onSelectBill={(bill) => dispatch(selectBill(bill))}
                 loading={loading}
               />
             }
